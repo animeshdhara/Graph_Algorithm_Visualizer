@@ -16,4 +16,7 @@ export default defineConfig({
       '@emotion/tooltip'
     ],
   },
+  build: {
+    chunkSizeWarningLimit: 2000, // Set this to your desired limit in kilobytes
+  },
 })
