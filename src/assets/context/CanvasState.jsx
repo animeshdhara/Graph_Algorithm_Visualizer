@@ -1,7 +1,7 @@
 import React, { useTransition } from 'react'
 import canvasContext from './CanvasContext'
 import { useState } from 'react'
-import { ANIMATION_TIME_MS, ANIMATION_TIME_MS_SPEED_HIGH, GRAPH_ALGORITHM, initalStylesheet, initialElements, TABLE_ROW_BG_COLOR, TABLE_ROW_BG_FLASH_COLOR } from '../../constants';
+import { ANIMATION_TIME_MS, ANIMATION_TIME_MS_SPEED_HIGH, GRAPH_ALGORITHM, initalStylesheet, initialElements, RUN_STATE, TABLE_ROW_BG_COLOR, TABLE_ROW_BG_FLASH_COLOR } from '../../constants';
 import { generateRandomPosition } from '../../utils/formatColor';
 import { toast } from 'react-toastify';
 import { FaArrowUpFromGroundWater } from 'react-icons/fa6';
@@ -31,16 +31,26 @@ export default function CanvasState(props) {
 
   const [animationTime, setAnimationTime] = useState(ANIMATION_TIME_MS);
   const [isRunning, setIsRunning] = useState(false);
+  const [topoSortedNodeIds,setTopoSortedNodeIds] = useState(nodes);
+  
+  const [runEnded,setRunEnded] = useState(RUN_STATE.STARTED);
 
   const nodeMapping = {};
 
-  const computeAdjacencyMatrix = () => {
-    nodes.forEach((node, index) => {
+  const computeAdjacencyMatrix = (nodes_array,new_elements) => {
+
+    var use_nodes_array = nodes_array;
+    if(use_nodes_array === undefined || use_nodes_array === null){
+       use_nodes_array = nodes;
+    }
+      
+    use_nodes_array.forEach((node, index) => {
       nodeMapping[node] = index;
     });
 
+
     const matrix = [];
-    let n = nodes.length;
+    let n = use_nodes_array.length;
     for (let i = 0; i < n; i++) {
       matrix[i] = [];
       for (let j = 0; j < n; j++) {
@@ -52,19 +62,24 @@ export default function CanvasState(props) {
       }
     }
 
-    elements.forEach((e) => {
-      if (e.data.source !== undefined) {
-        const source = e.data.source;
-        const target = e.data.target;
-        const u = nodeMapping[source];
-        const v = nodeMapping[target];
-
-        matrix[u][v] = e.data.weight;
-        if (!isDirected) { // For Undirected graph. 
-          matrix[v][u] = e.data.weight;
-        }
+      var use_elements = new_elements;
+      if(use_elements === undefined || use_elements === null){
+         use_elements = elements;
       }
-    })
+    
+      use_elements.forEach((e) => {
+        if (e.data.source !== undefined) {
+          const source = e.data.source;
+          const target = e.data.target;
+          const u = nodeMapping[source];
+          const v = nodeMapping[target];
+  
+          matrix[u][v] = e.data.weight;
+          if (!isDirected) { // For Undirected graph. 
+            matrix[v][u] = e.data.weight;
+          }
+        }
+      })
 
     // console.log('adjacency matrix: ',matrix);
 
@@ -75,9 +90,19 @@ export default function CanvasState(props) {
     computeAdjacencyMatrix()
   )
 
-  const createAdjacencyMatrixAndSetStartNode = (callback)=>{
-    setAdjacencyMatrix(computeAdjacencyMatrix());
-    setStartNode(startNode === null ? nodes[0] : startNode);
+  const createAdjacencyMatrixAndSetStartNode = (callback,nodes_array,new_elements)=>{
+    var use_nodes_array = nodes_array;
+    if(use_nodes_array === undefined || use_nodes_array === null){
+        use_nodes_array = nodes;
+    }
+
+    var use_elements = new_elements;
+    if(use_elements === undefined || use_elements === null){
+        use_elements = elements;
+    }
+
+    setAdjacencyMatrix(computeAdjacencyMatrix(use_nodes_array,use_elements));
+    setStartNode(startNode === null ? use_nodes_array[0] : startNode);
     if(callback){
       callback();
     }
@@ -309,11 +334,21 @@ export default function CanvasState(props) {
     setAdjacencyMatrix([]);
   }
 
+
+
   const changeDistance = (id, newDistance) => {
     setDistanceValue((prev) => ({
       ...prev,
       [id]: newDistance,
     }));
+  }
+
+  const createAndSetDistancetoInfinity = (new_nodes) => {
+       const new_dist_array = new_nodes.reduce((acc, node) => {
+        acc[node] = Infinity;
+        return acc;
+      }, {}); 
+       setDistanceValue(new_dist_array);
   }
 
   const setDistanceToInfinity = () => {
@@ -337,6 +372,13 @@ export default function CanvasState(props) {
 
   return (
     <canvasContext.Provider value={{
+      setRunEnded,runEnded,
+      topoSortedNodeIds,
+      setTopoSortedNodeIds,
+      createAndSetDistancetoInfinity,
+      setElements,
+      setNewEdge,
+      setNewNode,
       setIsRunning,
       isRunning,
       setAnimationTime,

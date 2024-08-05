@@ -7,6 +7,7 @@ import { IconButton } from '@mui/material';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 import EditWeightModal from './EditWeightModal';
 import canvasContext from '../assets/context/CanvasContext';
+import { toast } from 'react-toastify';
 
 export default function EdgeMenu({ cy,deleteEdge,disabled }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -76,6 +77,12 @@ const onConfirmModalEdit = ()=>{
 
   try {
     const wt = parseFloat(weight,10);
+
+    // console.log('wt ', wt);
+    if(isNaN(wt)){
+       throw new Error();
+    }
+
     updateEdge(edgeId,wt);
     
   } catch (error) {

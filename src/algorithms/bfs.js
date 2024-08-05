@@ -2,9 +2,7 @@ import { STATE } from "../constants";
 import {  animateEdge, animateNode } from "../utils/formatColor";
 
 export const bfs = async (cy, graph, startNode, isDirected, isWeighted,animationTime) => {
-  console.log("bfs called");
-  console.log("graph in bfs: ",graph);
-  
+
   
   let queue = [];
   queue.push(startNode);

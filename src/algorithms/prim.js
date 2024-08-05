@@ -73,8 +73,8 @@ export const prim = async (cy, graph, startNode, isDirected, isWeighted, nodeMap
   const parent = Array(V).fill(-1);
   const inMST = Array(V).fill(false);
 
-  console.log("adjacency matrix; ",adjacencyMatrix);
-  console.log("start node: ",startNode);
+  // console.log("adjacency matrix; ",adjacencyMatrix);
+  // console.log("start node: ",startNode);
   
   const minHeap = new MinHeap();
   key[nodeMapping[startNode]] = 0;

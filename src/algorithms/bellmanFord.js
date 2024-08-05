@@ -4,11 +4,11 @@ import {  animateEdge, animateNode, flashTableRowBgColor } from "../utils/format
 export const bellmanFord = async (cy, graph, startNode, isDirected, isWeighted, changeDistance, nodes,
   setActiveTableRowId,setTableRowBgColor,animationTime
 ) => {
-    console.log('bellmanFord called');
+    // console.log('bellmanFord called');
     // Implementation for Bellman-Ford algorithm
     // Step 1: Initialize distances from src to all other vertices as INFINITE
     changeDistance(startNode, 0);
-    console.log("startnode: ",startNode);
+    // console.log("startnode: ",startNode);
     
     const distances = {};
     for (let i = 0; i<nodes.length; i++) {
@@ -28,7 +28,7 @@ export const bellmanFord = async (cy, graph, startNode, isDirected, isWeighted, 
         const target = edge[0];
         const weight = edge[1];
         edges.push({source, target, weight});
-        console.log("source: ",source,"target: ",target,"weight: ",weight);
+        // console.log("source: ",source,"target: ",target,"weight: ",weight);
       }
     }
     let counter = 0;
@@ -44,7 +44,7 @@ export const bellmanFord = async (cy, graph, startNode, isDirected, isWeighted, 
           const weight = edges[j].weight;
   
             if (distances[src] !== Infinity && ((distances[src] + weight) < distances[dest])) {
-              console.log("counter: ",counter++);
+              // console.log("counter: ",counter++);
 
               await animateEdge(cy,src, dest,STATE.VISITED,animationTime,isDirected);
               await animateNode(cy,dest,STATE.VISITED,animationTime);
@@ -62,11 +62,11 @@ export const bellmanFord = async (cy, graph, startNode, isDirected, isWeighted, 
       const src = edges[i].source;
       const dest = edges[i].target;
       const weight = edges[i].weight;
-      console.log("weight in loop: ", weight);
+      // console.log("weight in loop: ", weight);
       
 
       if (distances[src] !== Infinity && ((distances[src] + weight) < distances[dest])) {
-        console.log("Negative-weight cycle detected!");
+        // console.log("Negative-weight cycle detected!");
           return false;
       }
     }

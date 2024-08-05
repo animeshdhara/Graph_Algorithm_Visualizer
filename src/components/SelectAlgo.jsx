@@ -72,7 +72,7 @@ export default function SelectAlgo({disabled}) {
         handleClose();
 
         if(algo === label) return;
-        console.log("label: ", label);
+        // console.log("label: ", label);
         setAlgo(label);
         setButtonText(label);
         handleClose();

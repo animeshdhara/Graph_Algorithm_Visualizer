@@ -1,9 +1,8 @@
-import {  sleep } from "../constants";
-import { flashTableRowBgColor } from "../utils/formatColor";
-
+import {  sleep, STATE } from "../constants";
+import { flashTableRowBgColor,flashEdgeWithNodes } from "../utils/formatColor";
 
 export const floydWarshall = async (cy, graph, startNode, isDirected, isWeighted, nodes, changeDistanceInMatrix,animationTime, setActiveTableColumnId, setActiveTableRowId,setTableRowBgColor) => {
-    console.log('floydWarshall called');
+    // console.log('floydWarshall called');
     // Implementation for Floyd-Warshall algorithm
     // console.log("graph begin: ",graph);
     
@@ -53,6 +52,8 @@ export const floydWarshall = async (cy, graph, startNode, isDirected, isWeighted
             for (let j = 0; j < V; j++) {
                 if ((dist[i][k] !== Infinity && dist[k][j] != Infinity)&& dist[i][k] + dist[k][j] < dist[i][j]) {
                     dist[i][j] = dist[i][k] + dist[k][j];
+                    // console.log(`i : ${nodes[i]} j : ${nodes[j]}`);
+                    await flashEdgeWithNodes(cy,nodes[i],nodes[j],STATE.VISITED,animationTime,isDirected);
                     await flashTableRowBgColor(i,animationTime,setActiveTableRowId,setTableRowBgColor);
                     await sleep(animationTime);
                     setActiveTableColumnId(j);

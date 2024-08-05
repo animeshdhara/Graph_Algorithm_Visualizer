@@ -65,6 +65,9 @@ export default function DropdownButtonEdge({disabled}) {
         
         try {
           const wt = parseFloat(weight,10);
+          if(isNaN(wt)){
+            throw new Error();
+          }
           addEdge(id, source, target,wt);
           
         } catch (error) {
@@ -77,7 +80,7 @@ export default function DropdownButtonEdge({disabled}) {
   return (
     <Menu  as="div" id="menu-edge" className="relative inline-block text-left px-3">
       <div>
-        <MenuButton disabled={disabled} ref={buttonRef} className=" inline-flex items-center w-auto justify-center gap-x-1.5 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-lg ring-1 ring-inset ring-gray-300 hover:bg-blue-500">
+        <MenuButton disabled={disabled} ref={buttonRef} className=" inline-flex items-center w-auto justify-center gap-x-1.5 rounded-md bg-red-900  hover:bg-red-700 ease-in  px-3 py-2 text-sm font-semibold text-white shadow-lg ring-1 ring-inset ring-gray-300">
           <span>Add Edge</span>
             <KeyboardArrowDownIcon />
         </MenuButton>

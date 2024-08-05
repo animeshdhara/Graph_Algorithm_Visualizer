@@ -16,7 +16,7 @@ export default function AnimationSlider({setAnimationTime,disabled}) {
   };
 
   return (
-    <div className="flex flex-row justify-between items-center bg-white pr-3 h-[38px] rounded-md hover:cursor-pointer hover:bg-gray-300 transition-all duration-300 ease-in-out">
+    <div className="flex flex-row justify-between items-center bg-white/80 hover:bg-white pr-3 h-[38px] rounded-md hover:cursor-pointer  transition-all duration-300 ease-in-out">
     <span className="text-sm font-semibold mx-4">Animation Speed</span>
     <Stack spacing={2} direction="row" sx={{ width: '100px' }} alignItems="center">
       <Slider disabled={disabled} aria-label="Default" value={value} onChange={handleChange} />

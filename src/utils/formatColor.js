@@ -2,10 +2,20 @@ import { ANIMATION_TIME_MS_SPEED_HIGH, ANIMATION_TIME_MS_SPEED_LOW, INITIAL_COLO
 
 export const colorNode = (cyNode,color) => {
     cyNode.style({ 'background-color': color});
+    if(color === VISITED_COLOR_NODE){
+        cyNode.style({ 'color': '#000'});
+    }else{
+        cyNode.style({ 'color': '#fff'});
+    }
 }
 
 export const colorEdge = (cyEdge,color) => {
     cyEdge.style({'line-color': color});
+    if(color === VISITED_COLOR_EDGE){
+        cyEdge.style({ 'color': '#000'});
+    }else{
+        cyEdge.style({ 'color': '#fff'});
+    }
 }
 
 export const colorEdgeArrow = (cyEdge,color) => {
@@ -74,6 +84,54 @@ export const animateEdge = (cy,sourceId,targetId,state,duration,isDirected) => {
     },duration);
     })
 }
+
+export const flashEdgeWithNodes = (cy,sourceId,targetId,state,duration,isDirected) => {
+
+    var edgeUi = cy.getElementById(formEdgeId(sourceId,targetId));
+    if(!isDirected && !edgeUi.length){
+        edgeUi = cy.getElementById(formEdgeId(targetId,sourceId));
+    }    
+
+    if(!edgeUi.length) return;
+
+    const node1Ui = cy.getElementById(sourceId);    
+    const node2Ui = cy.getElementById(targetId);    
+
+
+
+    return new Promise(resolve => {
+
+        var colorEdge1,colorNode1,oppositeEdge,oppositeNode;
+        if(state === STATE.VISITED){
+            colorEdge1 = VISITED_COLOR_EDGE;
+            colorNode1 = VISITED_COLOR_NODE;
+            oppositeEdge = UNVISITED_COLOR_EDGE;
+            oppositeNode = UNVISITED_COLOR_NODE;
+        }
+        else if(state === STATE.UNVISITED){
+            colorEdge1 = UNVISITED_COLOR_EDGE;
+            colorNode1 = UNVISITED_COLOR_NODE;
+            oppositeEdge = VISITED_COLOR_EDGE;
+            oppositeNode = VISITED_COLOR_NODE;
+        }
+
+        colorEdge(edgeUi,colorEdge1);
+        if(isDirected) colorEdgeArrow(edgeUi,colorEdge1);
+        colorNode(node1Ui,colorNode1);
+        colorNode(node2Ui,colorNode1);
+
+
+        setTimeout(()=>{
+            colorEdge(edgeUi,oppositeEdge);
+            if(isDirected) colorEdgeArrow(edgeUi,oppositeEdge);
+            colorNode(node1Ui,oppositeNode);
+            colorNode(node2Ui,oppositeNode);
+            resolve();
+    },duration);
+    })
+}
+
+
 
 export const ResetColor = (cy,elements) => {
     elements.forEach((element) => {

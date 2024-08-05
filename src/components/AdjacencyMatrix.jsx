@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { useContext } from 'react';
 import canvasContext from '../assets/context/CanvasContext';
@@ -14,6 +14,8 @@ const AdjacencyMatrix = () => {
 
   const context = useContext(canvasContext);
   const {adjacencyMatrix, nodes, tableRowBgColor,activeTableRowId, activeTableColumnId} = context;
+
+
 
   return (
     <TableContainer component={Paper} sx={{ width: 'auto', margin: 'auto' }}>

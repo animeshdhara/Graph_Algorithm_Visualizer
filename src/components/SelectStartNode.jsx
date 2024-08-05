@@ -10,6 +10,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 export default function SelectStartNode({disabled}) {
 
     const [node, setNode] = useState("");
+    const [label,setLabel] = useState("Select start Node");
 
     const buttonRef = useRef(null);
 
@@ -40,6 +41,7 @@ export default function SelectStartNode({disabled}) {
 
     const handleSave = ()=>{
         const id = node;
+        setLabel(node);
         changeStartNode(id);
         // changeDistance(id,0);   
         handleClose();
@@ -47,10 +49,10 @@ export default function SelectStartNode({disabled}) {
 
 
   return (
-    <Menu  as="div" id="menu-start-node" className="relative inline-block text-left px-3">
+    <Menu  as="div" id="menu-start-node" className="relative inline-block text-left px-3 w-[237px] ">
       <div>
-        <MenuButton disabled={disabled} ref={buttonRef} className=" items-start inline-flex justify-center gap-x-1.5 rounded-md bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-lg ring-1 ring-inset ring-gray-300 hover:bg-blue-500">
-          <span>Select Start Node</span>
+        <MenuButton disabled={disabled} ref={buttonRef} className=" items-start inline-flex justify-center gap-x-1.5 rounded-md bg-red-900 hover:bg-red-700 px-3 py-2 text-sm font-semibold text-white shadow-lg ring-1 ring-inset ring-gray-300 ">
+          <span>{label}</span>
             <KeyboardArrowDownIcon />
         </MenuButton>
       </div>

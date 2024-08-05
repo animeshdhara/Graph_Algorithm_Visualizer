@@ -5,7 +5,7 @@ export const dfs = async(cy, graph, startNode,isDirected,isWeighted,animationTim
     const visited = new Set();
     const stack = [{ node: startNode,parentNode : '#' , weight: 0 }];
 
-    console.log('time is ',animationTime);
+    
 
     while (stack.length > 0) {
       const { node,parentNode, weight } = stack.pop();
